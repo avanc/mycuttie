@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>mycuttie</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="images/favicon.png">
+  <script src="3rdparty/paho-mqtt-1.1.0.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  
+
+  <script src="mc-basic.js"></script>
+  <script src="mc-mqtt.js"></script>
+  <script src="mc-vue.js"></script>
+  <script src="mc-config.js"></script>
+  
+  
+  <style> /* https://www.w3schools.com/howto/howto_css_switch.asp */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+  </style>
+
+  
+  
+  
+</head>
+
+<body>
+
+  <div id="app">
+    <ul>
+      <li v-for="route in this.$router.options.routes">
+        <router-link :to="route.path">{{ route.name }}</router-link>
+      </li>
+    </ul>
+    
+    <router-view></router-view>
+  </div>
+
+
+  <script>
+  
+    console.log(mc.config);
+    if (mc.config.hasOwnProperty("mqtt")) {
+      mc.mqtt.connect();
+    }
+
+    
+    var routes = [
+      { path: '/config', component: mc.vue.config, name: "Config" },
+    ];
+
+    for (var i=0; i<mc.config.pages.length; i++) {
+      var route= {};
+      route["path"]='/' + mc.config.pages[i].shortname;
+      route["name"]=mc.config.pages[i].name;
+      route["component"]=mc.vue.page;
+      route["props"]={data: mc.config.pages[i]};
+      routes.push(route);
+    }
+    
+    const router = new VueRouter({
+      routes: routes
+    })
+    
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      router: router
+    });
+    
+
+    mc.mqtt.subscribe("mycutie/main/page", function(rec_data){
+    var found=false;
+      rec_data.payload.source=rec_data.topic;
+      for (var i=0; i<mc.config.pages.length; i++) {
+        if (rec_data.topic == mc.config.pages[i].source) {
+          console.log("Page found");
+          mc.config.pages[i]=rec_data.payload;
+          found=true;
+        }
+      }
+      if (!found) {
+        mc.config.pages.push(rec_data.payload);
+      }
+      mc.saveConfig();
+    });
+    
+    
+  
+  </script>
+  
+
+</body>
+
+</html>
