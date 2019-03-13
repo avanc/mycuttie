@@ -3,6 +3,7 @@ if (!mc.hasOwnProperty("vue")) {
 }
 
 mc.vue.config = Vue.extend({
+  props: ["pages"],
   data: function () {
     return {
       mqtt_config: {
@@ -13,9 +14,10 @@ mc.vue.config = Vue.extend({
         password: mc.config.mqtt.password
       },
       page: {
-        definition: JSON.stringify(mc.config.pages[0], null, 2),
-        topic: mc.config.pages[0].source
-      }
+        definition: "",
+        topic: ""
+      },
+      selected_topic: undefined
     }
   },
   template: `<div class="w3-row">
@@ -34,6 +36,14 @@ mc.vue.config = Vue.extend({
         <button v-on:click="configureTestServer">Set test server</button>
         <button v-on:click="connect">Connect to server</button>
         
+        <div class="">
+          <label class="">Load Topic Config</label>
+          <select class="w3-select w3-border" v-model="selected_topic" @change="topicselected">
+            <option v-for="page in pages" v-bind:value="page.source">
+              {{ page.source }}
+            </option>
+          </select>
+        </div>
         <input class="w3-input w3-border" type="text" v-model="page.topic" placeholder="Topic">
         <textarea class = "w3-input" style = "width:100%; height: 300px" v-model="page.definition" placeholder="Page definition"></textarea>
         <button v-on:click="publish">Store config</button>
@@ -41,6 +51,14 @@ mc.vue.config = Vue.extend({
       </div>
     </div>`,
   methods: {
+    topicselected: function() {
+      this.page.topic=this.selected_topic;
+      for (var i=0; i< this.pages.length; i++) {
+        if (this.pages[i].source==this.selected_topic) {
+          this.page.definition=JSON.stringify(this.pages[i], null, 2);
+        }
+      }
+    },
     configureTestServer: function() {
       this.mqtt_config.host="broker.hivemq.com";
       this.mqtt_config.port=8000;

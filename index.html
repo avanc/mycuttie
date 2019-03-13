@@ -112,7 +112,7 @@
 
     
     var routes = [
-      { path: '/config', component: mc.vue.config, name: "Config" },
+      { path: '/config', component: mc.vue.config, name: "Config", props: {pages: mc.config.pages} },
     ];
 
     for (var i=0; i<mc.config.pages.length; i++) {
