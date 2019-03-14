@@ -80,17 +80,15 @@ mc.vue.config = Vue.extend({
           "type": "mc-dropdown",
           "topic_get": "test/rolladen/get/state",
           "topic_set": "test/rolladen/set/state",
-          "value": undefined,
           "options": [
-            { "text": 'geöffnet', "value": 'geoeffnet' },
-            { "text": 'halb', "value": 'halb' },
-            { "text": 'geschlossen', "value": 'geschlossen' }
+            { "text": "geöffnet", "value": "geoeffnet" },
+            { "text": "halb", "value": "halb" },
+            { "text": "geschlossen", "value": "geschlossen" }
           ]
         },
         {
           "name": "Licht",
           "type": "mc-switch",
-          "value": undefined,
           "topic_get": "test/licht/get/state",
           "topic_set": "test/licht/set/state"
         }
@@ -104,17 +102,15 @@ mc.vue.config = Vue.extend({
           "type": "mc-dropdown",
           "topic_get": "test/rolladen/set/state",
           "topic_set": "test/rolladen/get/state",
-          "value": undefined,
           "options": [
-            { "text": 'geöffnet', "value": 'geoeffnet' },
-            { "text": 'halb', "value": 'halb' },
-            { "text": 'geschlossen', "value": 'geschlossen' }
+            { "text": "geöffnet", "value": "geoeffnet" },
+            { "text": "halb", "value": "halb" },
+            { "text": "geschlossen", "value": "geschlossen" }
           ]
         },
         {
           "name": "Licht",
           "type": "mc-switch",
-          "value": undefined,
           "topic_get": "test/licht/set/state",
           "topic_set": "test/licht/get/state"
         }
