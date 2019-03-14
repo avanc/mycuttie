@@ -135,17 +135,18 @@
     });
     
 
-    mc.mqtt.subscribe("mycutie/main/page", function(rec_data){
-    var found=false;
+    mc.mqtt.subscribe("mycuttie/+/page", function(rec_data){
+      var found=false;
       rec_data.payload.source=rec_data.topic;
       for (var i=0; i<mc.config.pages.length; i++) {
         if (rec_data.topic == mc.config.pages[i].source) {
-          console.log("Page found");
+          console.log("Page updated");
           mc.config.pages[i]=rec_data.payload;
           found=true;
         }
       }
       if (!found) {
+        console.log("New page");
         mc.config.pages.push(rec_data.payload);
       }
       mc.saveConfig();

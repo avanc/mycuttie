@@ -10,6 +10,35 @@ mc.mqtt = (function () {
 
     var publish_stack=[];
 
+    var mqttWildcard=function(topic, wildcard) { 
+      if (topic === wildcard) {
+          return true;
+      } else if (wildcard === '#') {
+          return true;
+      }
+
+      var t = String(topic).split('/');
+      var w = String(wildcard).split('/');
+
+      var i = 0;
+      for (var lt = t.length; i < lt; i++) {
+        if (w[i] === '#') {
+            return true;
+        } else if (w[i] === '+') {
+            //OK
+        } else if (w[i] !== t[i]) {
+            return null;
+        }
+      }
+
+      if (w[i] === '#') {
+          i += 1;
+      }
+
+      return (i === w.length);
+    }
+    
+    
     var Dispatcher = function() {
       this.list={}
     };
@@ -34,13 +63,19 @@ mc.mqtt = (function () {
     }
     
     Dispatcher.prototype.call = function(topic, payload) {
-      if (this.list.hasOwnProperty(topic)){
-        for (var i=0; i<this.list[topic].length; i++) {
-          this.list[topic][i]({topic: topic, payload:payload});
+      var found=false;
+      for (var wildcard in this.list){
+        if (this.list.hasOwnProperty(wildcard)){
+          if (mqttWildcard(topic, wildcard)) {
+            found=true;
+            for (var i=0; i<this.list[wildcard].length; i++) {
+              this.list[wildcard][i]({topic: topic, payload:payload});
+            }
+          }
         }
       }
-      else {
-        console.log("No receiver for topic " + message.destinationName);
+      if (!found) {
+        console.log("No handler found for topic " + topic);
       }
     }
     
