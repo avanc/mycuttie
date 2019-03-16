@@ -6,7 +6,7 @@ mc.mqtt = (function () {
   
     var client = null;
     
-    var connected=false;
+    var state= {connected:false};
 
     var publish_stack=[];
 
@@ -84,7 +84,7 @@ mc.mqtt = (function () {
     
     var onConnectionLost = function (responseObject) {
       if (responseObject.errorCode !== 0) {
-        connected=false;
+        state.connected=false;
         console.log("onConnectionLost:"+responseObject.errorMessage);
       }
     }
@@ -101,7 +101,7 @@ mc.mqtt = (function () {
     }
 
     var onSuccess = function() {
-      connected=true;
+      state.connected=true;
       console.log("Connected");
       for (var topic in dispatcher.list) {
         if (dispatcher.list.hasOwnProperty(topic)) {
@@ -153,7 +153,7 @@ mc.mqtt = (function () {
       if (typeof data != "string"){
         json_data=JSON.stringify(data);
       }
-      if (connected) {
+      if (state.connected) {
         console.log("Publish " + topic + " : " + json_data);
         client.send(topic, json_data, qos, retained);
       }
@@ -169,16 +169,19 @@ mc.mqtt = (function () {
       console.log("Subscribe " + topic);
       var subscription = dispatcher.add(topic, callback);
       
-      if (connected) {
+      if (state.connected) {
         client.subscribe(topic);
       }
       return subscription;
     }
     
+
+    
     return {
       connect: connect,
       subscribe: subscribe,
-      publish: publish
+      publish: publish,
+      state: state
     };
 
 })();
