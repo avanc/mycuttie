@@ -17,10 +17,27 @@ mc.vue.config = Vue.extend({
         definition: "",
         topic: ""
       },
-      selected_topic: undefined
+      selected_topic: undefined,
+      error: {
+        title: "",
+        text: ""
+      }
     }
   },
   template: `<div class="w3-row">
+      <div id="id01" class="w3-modal" style="display:block" v-show="error.title != ''">
+        <div class="w3-modal-content w3-card-4">
+          <header class="w3-container w3-red"> 
+            <span v-on:click="error.title=''" 
+            class="w3-button w3-display-topright">&times;</span>
+            <h2>{{ error.title }}</h2>
+          </header>
+          <div class="w3-container">
+            <p>{{ error.text}}.</p>
+          </div>
+        </div>
+      </div>
+    
       <span class="w3-col s6">Config</span>
       <div class="w3-col s12">
         <label class="w3-text-gray">Host</label>
@@ -65,11 +82,11 @@ mc.vue.config = Vue.extend({
       this.mqtt_config.path="/mqtt";
       this.mqtt_config.username=null;
       this.mqtt_config.password=null;
-      this.page.topic="mycutie/main/page";
+      this.page.topic="mycuttie/main/page";
       this.page.definition=`{
   "name": "Test Dashboard",
   "shortname": "main",
-  "rank": 1, // Rank for sorting pages in the link list
+  "rank": 1,
   "type": "mc-page",
   "cards": [
     { "name": "Wohnzimmer",
@@ -78,8 +95,8 @@ mc.vue.config = Vue.extend({
         {
           "name": "Rolladen",
           "type": "mc-dropdown",
-          "topic_get": "test/rolladen/get/state",
-          "topic_set": "test/rolladen/set/state",
+          "topic_get": "test/rolladen/get/level",
+          "topic_set": "test/rolladen/set/level",
           "options": [
             { "text": "geöffnet", "value": "geoeffnet" },
             { "text": "halb", "value": "halb" },
@@ -100,8 +117,8 @@ mc.vue.config = Vue.extend({
         {
           "name": "Rolladen",
           "type": "mc-dropdown",
-          "topic_get": "test/rolladen/set/state",
-          "topic_set": "test/rolladen/get/state",
+          "topic_get": "test/rolladen/set/level",
+          "topic_set": "test/rolladen/get/level",
           "options": [
             { "text": "geöffnet", "value": "geoeffnet" },
             { "text": "halb", "value": "halb" },
@@ -134,12 +151,14 @@ mc.vue.config = Vue.extend({
       try {
         // Test if valid JSON
         JSON.parse(this.page.definition);
-        mc.mqtt.publish(this.page.topic, this.page.definition, {retained: true})
       } catch (e) {
         console.log("Invalid JSON")
-        console.log(e)
-        
+        //console.log(e)
+        this.error.title="Invalid JSON configuration"
+        this.error.text=e.message;
+        return;
       }
+      mc.mqtt.publish(this.page.topic, this.page.definition, {retained: true})
     }
   }
 })
