@@ -177,6 +177,19 @@ mc.mqtt = (function () {
     
 
     
+    var handleVisibilityChange = function() {
+      if (document.hidden) {
+        console.log("hidden");
+      } else  {
+        console.log("shown");
+        if (!state.connected) {
+          connect();
+        }
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange, false);
+    
     return {
       connect: connect,
       subscribe: subscribe,
