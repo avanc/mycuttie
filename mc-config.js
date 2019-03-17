@@ -108,6 +108,17 @@ mc.vue.config = Vue.extend({
           "type": "mc-switch",
           "topic_get": "test/licht/get/state",
           "topic_set": "test/licht/set/state"
+        },
+        {
+          "name": "Slider",
+          "type": "mc-slider",
+          "topic_get": "test/licht/get/level",
+          "topic_set": "test/licht/set/level",
+          "range": {
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
         }
       ]
     },
@@ -130,6 +141,17 @@ mc.vue.config = Vue.extend({
           "type": "mc-switch",
           "topic_get": "test/licht/set/state",
           "topic_set": "test/licht/get/state"
+        },
+        {
+          "name": "Slider",
+          "type": "mc-slider",
+          "topic_get": "test/licht/set/level",
+          "topic_set": "test/licht/get/level",
+          "range": {
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
         }
       ]
     }
