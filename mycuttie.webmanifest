@@ -1,0 +1,40 @@
+{
+    "name": "mycuttie",
+    "short_name": "mycuttie",
+    "description": "Web-based dashboard using MQTT",
+    "launch_path": "/",
+    "display": "standalone",
+    "background_color" : "#fff" ,
+    "icons": [
+      {
+        "src": "images/mycuttie-16.png",
+        "sizes": "16x16",
+        "type": "image/png"
+      },
+      {
+        "src": "images/mycuttie-32.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      },
+      {
+        "src": "images/mycutie-64.png",
+        "sizes": "64x64",
+        "type": "image/png"
+      },
+      {
+        "src": "images/mycuttie-128.png",
+        "sizes": "128x128",
+        "type": "image/png"
+      },
+      {
+        "src": "images/mycuttie-256.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      }
+    ],
+    "developer": {
+        "name": "Sven Klomp",
+        "url": "https://github.com/avanc/mycuttie"
+    },
+    "default_locale": "en"
+}
