@@ -2,7 +2,7 @@
     "name": "mycuttie",
     "short_name": "mycuttie",
     "description": "Web-based dashboard using MQTT",
-    "launch_path": "/",
+    "start_url": "/",
     "display": "standalone",
     "background_color" : "#fff" ,
     "icons": [
