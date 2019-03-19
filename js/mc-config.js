@@ -9,6 +9,7 @@ mc.vue.config = Vue.extend({
       mqtt_config: {
         host: mc.config.mqtt.host,
         port: mc.config.mqtt.port,
+        ssl: mc.config.mqtt.useSSL,
         path: mc.config.mqtt.path,
         username: mc.config.mqtt.username,
         password: mc.config.mqtt.password
@@ -44,6 +45,8 @@ mc.vue.config = Vue.extend({
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.host" placeholder="hostname">
         <label class="w3-text-gray">Port</label>
         <input class="w3-input w3-border" type="text" v-model.number="mqtt_config.port" placeholder="port">
+        <label class="w3-text-gray">SSL</label>
+        <input class="w3-check" type="checkbox" v-model.number="mqtt_config.ssl">
         <label class="w3-text-gray">Path</label>
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.path" placeholder="path">
         <label class="w3-text-gray">Username</label>
@@ -77,8 +80,9 @@ mc.vue.config = Vue.extend({
       }
     },
     configureTestServer: function() {
-      this.mqtt_config.host="broker.hivemq.com";
-      this.mqtt_config.port=8000;
+      this.mqtt_config.host="test.mosquitto.org";
+      this.mqtt_config.port=8081;
+      this.mqtt_config.ssl=true;
       this.mqtt_config.path="/mqtt";
       this.mqtt_config.username=null;
       this.mqtt_config.password=null;
@@ -163,6 +167,7 @@ mc.vue.config = Vue.extend({
       mc.config.mqtt = {
         host: this.mqtt_config.host,
         port: this.mqtt_config.port,
+        useSSL: this.mqtt_config.ssl,
         path: this.mqtt_config.path,
         username: this.mqtt_config.username,
         password: this.mqtt_config.password

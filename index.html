@@ -21,21 +21,23 @@
   
   <script src="upup.min.js"></script>
   <script>
-    UpUp.start({
-      'cache-version': 'v1',
-      'content-url': 'index.html',
-      'assets': [
-        '3rdparty/css/w3.css',
-        'css/slider.css',
-        '3rdparty/js/paho-mqtt-1.1.0.js',
-        "3rdparty/js/vue.js",
-        "3rdparty/js/vue-router.js",
-        "js/mc-basic.js",
-        "js/mc-mqtt.js",
-        "js/mc-vue.js",
-        "js/mc-config.js"
-      ]
-    });
+    if (UpUp) {
+      UpUp.start({
+        'cache-version': 'v1',
+        'content-url': 'index.html',
+        'assets': [
+          '3rdparty/css/w3.css',
+          'css/slider.css',
+          '3rdparty/js/paho-mqtt-1.1.0.js',
+          "3rdparty/js/vue.js",
+          "3rdparty/js/vue-router.js",
+          "js/mc-basic.js",
+          "js/mc-mqtt.js",
+          "js/mc-vue.js",
+          "js/mc-config.js"
+        ]
+      });
+    }
   </script>
   
   

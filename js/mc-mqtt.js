@@ -134,7 +134,8 @@ mc.mqtt = (function () {
         
         client.connect({
           reconnect:true,
-          onSuccess: onSuccess
+          onSuccess: onSuccess,
+          useSSL: (mc.config.mqtt.useSSL==true)
         });
       } else {
         console.log("mqtt: no valid config");
