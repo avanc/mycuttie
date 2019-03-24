@@ -19,7 +19,8 @@
 
   <link rel="stylesheet" href="3rdparty/css/w3.css">
 <!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-  
+
+  <link rel="stylesheet" href="css/icons.css">
   <link rel="stylesheet" href="css/slider.css">
 
   
@@ -126,9 +127,8 @@
 </head>
 
 <body>
-
   <div id="app">
-    <span v-on:click="error.title=''" class="w3-button w3-display-topright"><span v-show="mqtt_state.connected">C</span><span v-show="!(mqtt_state.connected)">N</span></span>
+    <span v-on:click="error.title=''" class="w3-button w3-display-topright"><span v-show="mqtt_state.connected" class="icon-state-connected w3-xxlarge"></span><span v-show="!(mqtt_state.connected)" class="icon-state-disconnected w3-xxlarge"></span></span>
     <ul>
       <li v-for="route in this.$router.options.routes">
         <router-link :to="route.path">{{ route.name }}</router-link>
