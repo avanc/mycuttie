@@ -130,8 +130,8 @@
   <div id="app">
     <span class="w3-display-topright"><router-link to="/config" style="text-decoration: none;"><span v-show="mqtt_state.connected" class="icon-state-connected w3-xxlarge"></span><span v-show="!(mqtt_state.connected)" class="icon-state-disconnected w3-xxlarge"></span></router-link></span>
     <ul>
-      <li v-for="route in this.$router.options.routes">
-        <router-link :to="route.path">{{ route.name }}</router-link>
+      <li v-for="link in link_list">
+        <router-link :to="link.path">{{ link.name }}</router-link>
       </li>
     </ul>
     
@@ -151,6 +151,7 @@
       { path: '/config', component: mc.vue.config, name: "Config", props: {pages: mc.config.pages} },
     ];
 
+    var link_list = [];
     for (var i=0; i<mc.config.pages.length; i++) {
       var route= {};
       route["path"]='/' + mc.config.pages[i].shortname;
@@ -158,6 +159,7 @@
       route["component"]=mc.vue.page;
       route["props"]={data: mc.config.pages[i]};
       routes.push(route);
+      link_list.push({name: route["name"], path: route["path"]});
     }
     
     const router = new VueRouter({
@@ -166,7 +168,10 @@
     
     var app = new Vue({
       el: '#app',
-      data: {mqtt_state: mc.mqtt.state},
+      data: {
+        mqtt_state: mc.mqtt.state,
+        link_list: link_list
+      },
       router: router
     });
     
