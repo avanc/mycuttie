@@ -170,10 +170,19 @@
       router: router
     });
     
-
+    // Remove outdated pages and mark others as old
+    for( var i = mc.config.pages.length-1; i>=0; i--){
+      if ( mc.config.pages[i].outdated == true ) {
+        mc.config.pages.splice(i, 1);
+      } else {
+        mc.config.pages[i].outdated=true;
+      }
+    }
+      
     mc.mqtt.subscribe("mycuttie/+/page", function(rec_data){
       var found=false;
       rec_data.payload.source=rec_data.topic;
+      rec_data.payload.outdated=false;
       for (var i=0; i<mc.config.pages.length; i++) {
         if (rec_data.topic == mc.config.pages[i].source) {
           console.log("Page updated");
