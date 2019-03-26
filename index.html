@@ -170,7 +170,17 @@
       el: '#app',
       data: {
         mqtt_state: mc.mqtt.state,
-        link_list: link_list
+        pages: mc.config.pages
+      },
+      computed: {
+        link_list: function () {
+          var list=[];
+          for (var i=0; i<this.pages.length; i++) {
+            list.push({name: this.pages[i].name, path: this.pages[i].shortname, rank: (typeof (this.pages[i].rank) == "undefined" ? 0 : this.pages[i].rank) });
+          }
+          list.sort(function(a, b){return b.rank - a.rank});
+          return list;
+        }
       },
       router: router
     });
