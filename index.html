@@ -185,21 +185,23 @@
     }
       
     mc.mqtt.subscribe("mycuttie/+/page", function(rec_data){
-      var found=false;
-      rec_data.payload.source=rec_data.topic;
-      rec_data.payload.outdated=false;
-      for (var i=0; i<mc.config.pages.length; i++) {
-        if (rec_data.topic == mc.config.pages[i].source) {
-          console.log("Page updated");
-          mc.config.pages[i]=rec_data.payload;
-          found=true;
+      if (mc.validatePage(rec_data.payload)) {
+        var found=false;
+        rec_data.payload.source=rec_data.topic;
+        rec_data.payload.outdated=false;
+        for (var i=0; i<mc.config.pages.length; i++) {
+          if (rec_data.topic == mc.config.pages[i].source) {
+            console.log("Page updated");
+            mc.config.pages[i]=rec_data.payload;
+            found=true;
+          }
         }
+        if (!found) {
+          console.log("New page");
+          mc.config.pages.push(rec_data.payload);
+        }
+        mc.saveConfig();
       }
-      if (!found) {
-        console.log("New page");
-        mc.config.pages.push(rec_data.payload);
-      }
-      mc.saveConfig();
     });
     
     

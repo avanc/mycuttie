@@ -175,15 +175,17 @@ mc.vue.config = Vue.extend({
       mc.saveConfig();
     },
     publish: function() {
-      try {
-        // Test if valid JSON
-        JSON.parse(this.page.definition);
-      } catch (e) {
-        console.log("Invalid JSON")
-        //console.log(e)
-        this.error.title="Invalid JSON configuration"
-        this.error.text=e.message;
-        return;
+      if (this.page.definition != "") {
+        try {
+          // Test if valid JSON
+          JSON.parse(this.page.definition);
+        } catch (e) {
+          console.log("Invalid JSON")
+          //console.log(e)
+          this.error.title="Invalid JSON configuration"
+          this.error.text=e.message;
+          return;
+        }
       }
       mc.mqtt.publish(this.page.topic, this.page.definition, {retained: true})
     }

@@ -165,3 +165,9 @@ Vue.component('mc-slider', {
       <input type="range" v-bind:min="data.range.min" v-bind:max="data.range.max" v-bind:step="data.range.step" v-model="value" @change="valueChanged">
     </div>`
 })
+
+mc.validatePage = function(page) {
+  if (typeof page !== 'object' || page === null) return false;
+  
+  return true;
+}
