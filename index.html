@@ -151,7 +151,6 @@
       { path: '/config', component: mc.vue.config, name: "Config", props: {pages: mc.config.pages} },
     ];
 
-    var link_list = [];
     for (var i=0; i<mc.config.pages.length; i++) {
       var route= {};
       route["path"]='/' + mc.config.pages[i].shortname;
@@ -159,7 +158,6 @@
       route["component"]=mc.vue.page;
       route["props"]={data: mc.config.pages[i]};
       routes.push(route);
-      link_list.push({name: route["name"], path: route["path"]});
     }
     
     const router = new VueRouter({
@@ -195,23 +193,28 @@
     }
       
     mc.mqtt.subscribe("mycuttie/+/page", function(rec_data){
-      if (mc.validatePage(rec_data.payload)) {
-        var found=false;
-        rec_data.payload.source=rec_data.topic;
-        rec_data.payload.outdated=false;
-        for (var i=0; i<mc.config.pages.length; i++) {
-          if (rec_data.topic == mc.config.pages[i].source) {
-            console.log("Page updated");
+      var validPage=mc.validatePage(rec_data.payload);
+      var found=false;
+      rec_data.payload.source=rec_data.topic;
+      rec_data.payload.outdated=false;
+      for (var i=0; i<mc.config.pages.length; i++) {
+        if (rec_data.topic == mc.config.pages[i].source) {
+          console.log("Page updated");
+          found=true;
+          if (validPage) {
             mc.config.pages[i]=rec_data.payload;
-            found=true;
+          } else {
+            mc.config.pages.splice(i,1);
           }
         }
-        if (!found) {
-          console.log("New page");
+      }
+      if (!found) {
+        console.log("New page");
+        if (validPage) {
           mc.config.pages.push(rec_data.payload);
         }
-        mc.saveConfig();
       }
+      mc.saveConfig();
     });
     
     
