@@ -6,8 +6,7 @@ mc.vue.page = Vue.extend({
   props: ["data"],
   template: `
     <div>
-      {{ data.name }}<br>
-      <div class="w3-row">
+      <div class="w3-row-padding w3-stretch">
         <mc-card v-for="card in data.cards" v-bind:data="card"></> </mc-card>
       </div>
     </div>`
@@ -16,14 +15,14 @@ Vue.component('mc-page', mc.vue.page)
 
 Vue.component('mc-card', {
   props: ["data"],
-  template: `<div class="w3-third w3-card">
-      <header class="w3-container w3-blue">
-        <h2>{{ data.name }}</h2>
-      </header>
-      <div class="w3-container">
-        <component v-for="unit in data.units" v-bind:is="unit.type" v-bind:data="unit"></component><br>
+  template: `
+    <div class="w3-third w3-margin-bottom">
+      <div class="w3-container w3-theme-l2">
+        <h3 class="w3-col">{{ data.name }}</h3>
       </div>
-      
+      <div syle="border: 6px solid #9eb1bb" class="w3-container w3-theme-l4">
+        <component v-for="unit in data.units" v-bind:is="unit.type" v-bind:data="unit"></component><br>
+      </div>      
     </div>`
 })
 
@@ -65,9 +64,11 @@ Vue.component('mc-dropdown', {
       this.subscription=mc.mqtt.subscribe(this.data.topic_get, callback); 
     } 
   },
-  template: `<div class="w3-row">
-      <label class="w3-col s6">{{ data.name }}</label>
-      <select class="w3-col s6 w3-select w3-border" v-model="value" @change="valueChanged">
+  template: `
+    <div class="w3-cell-row w3-border-bottom">
+      <label class="w3-cell w3-cell-middle">{{ data.name }}</label>
+      <select class="w3-cell w3-cell-middle w3-select " v-model="value" @change="valueChanged">
+        <option value="" disabled selected>Unbekannt</option>
         <option v-for="option in data.options" v-bind:value="option.value">
           {{ option.text }}
         </option>
@@ -113,9 +114,10 @@ Vue.component('mc-switch', {
       this.subscription=mc.mqtt.subscribe(this.data.topic_get, callback); 
     } 
   },
-  template: `<div class="w3-row">
-      <label class="w3-col s6">{{ data.name }}</label>
-      <label class="switch">
+  template: `
+    <div class="w3-cell-row w3-border-bottom">
+      <label class="w3-cell w3-cell-middle">{{ data.name }}</label>
+      <label class="w3-cell w3-cell-middle switch">
         <input type="checkbox" v-model="value" @change="valueChanged">
         <span class="slider round"></span>
       </label>
@@ -160,9 +162,10 @@ Vue.component('mc-slider', {
       this.subscription=mc.mqtt.subscribe(this.data.topic_get, callback); 
     } 
   },
-  template: `<div class="w3-row">
-      <label class="w3-col s6">{{ data.name }}</label>
-      <input type="range" v-bind:min="data.range.min" v-bind:max="data.range.max" v-bind:step="data.range.step" v-model="value" @change="valueChanged">
+  template: `
+    <div class="w3-cell-row w3-border-bottom">
+      <label class="w3-cell w3-cell-middle">{{ data.name }}</label>
+      <input class="w3-cell w3-cell-middle" type="range" v-bind:min="data.range.min" v-bind:max="data.range.max" v-bind:step="data.range.step" v-model="value" @change="valueChanged">
     </div>`
 })
 
