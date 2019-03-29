@@ -137,7 +137,7 @@
 
     <!-- Navigation bar for large screens -->
     <div class="w3-bar w3-theme-d2 w3-hide-small">
-      <router-link class="w3-bar-item w3-button w3-hover-theme" v-for="link in link_list" :to="link.path" active-class="w3-theme">{{ link.name }}</router-link>
+      <router-link class="w3-bar-item w3-button w3-hover-theme" v-for="link in link_list" :to="link.path" :key="link.path" active-class="w3-theme">{{ link.name }}</router-link>
     </div>
     
     <!-- Navigation bar for small screens -->
@@ -145,7 +145,7 @@
       <a class="w3-col w3-button" style="width:50px" v-on:click="showMenu = !showMenu">&#9776;</a>
       <div class="w3-rest w3-red">
         <div class="w3-bar-block w3-theme-d2">
-          <router-link class="w3-bar-item w3-button w3-hover-theme" v-bind:class="{ 'w3-show' : showMenu }" v-for="link in link_list" :to="link.path" active-class="w3-theme w3-show">{{ link.name }}</router-link>
+          <router-link class="w3-bar-item w3-button w3-hover-theme" v-bind:class="{ 'w3-show' : showMenu }" v-for="link in link_list" :to="link.path" :key="link.path" active-class="w3-theme w3-show">{{ link.name }}</router-link>
         </div>
       </div>
     </div>
