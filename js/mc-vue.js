@@ -169,6 +169,68 @@ Vue.component('mc-slider', {
     </div>`
 })
 
+Vue.component('mc-text', {
+  props: ["data"],
+  data: function () {
+    return {
+      value: undefined,
+      subscription: undefined
+    }
+  },
+  computed: {
+    formattedText: function () {
+      var value=this.value;
+      var text = this.data.text;
+      var formattedText;
+      
+      if (typeof value == "undefined") {
+        value="";
+      }
+      
+      if (typeof text == "undefined") {
+        formattedText=value;
+      }
+      else {
+        formattedText = text.replace("$value", value);
+      }
+      
+      return formattedText;
+    }
+  },
+  watch: {
+    "data.topic_get": function(val){
+      console.log("get-topic changed");
+      this.value=undefined;
+      this.subscribe();
+    }
+  },
+  created: function() {
+    this.subscribe();
+  },
+  methods:{
+    subscribe: function() {
+      console.log(this.subscription)
+      if (this.subscription){
+        console.log("Removing subscription");
+        this.subscription.remove();
+      }
+      
+      console.log("Create callback for " + this.data.name);
+      var context=this;
+      var callback=function(data) {
+        console.log("Data received for " + context.data.name);
+        context.value=data.payload;
+      };
+      this.subscription=mc.mqtt.subscribe(this.data.topic_get, callback); 
+    } 
+  },
+  template: `
+    <div class="w3-cell-row w3-border-bottom">
+      <span class="w3-cell w3-cell-middle">{{ formattedText }}</span>
+    </div>`
+})
+
+
 mc.validatePage = function(page) {
   if (typeof page !== 'object' || page === null) return false;
   

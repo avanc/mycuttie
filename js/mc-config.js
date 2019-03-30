@@ -156,7 +156,13 @@ mc.vue.config = Vue.extend({
             "max": 1,
             "step": 0.01
           }
-        }
+        },
+        {
+          "name": "Text",
+          "type": "mc-text",
+          "text": "Der Rolladen ist $value.",
+          "topic_get": "test/rolladen/set/level"
+        },
       ]
     }
   ]
