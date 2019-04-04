@@ -20,7 +20,7 @@ Vue.component('mc-card', {
       <div class="w3-container w3-theme-l2">
         <h3 class="w3-col">{{ data.name }}</h3>
       </div>
-      <div syle="border: 6px solid #9eb1bb" class="w3-container w3-theme-l4">
+      <div class="w3-container w3-theme-l4">
         <component v-for="unit in data.units" v-bind:is="unit.type" v-bind:data="unit"></component><br>
       </div>      
     </div>`
