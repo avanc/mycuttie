@@ -25,7 +25,8 @@ mc.vue.config = Vue.extend({
       }
     }
   },
-  template: `<div class="w3-row">
+  template: `
+    <div class="w3-row">
       <div id="id01" class="w3-modal" style="display:block" v-show="error.title != ''">
         <div class="w3-modal-content w3-card-4">
           <header class="w3-container w3-red"> 
@@ -39,14 +40,17 @@ mc.vue.config = Vue.extend({
         </div>
       </div>
     
-      <span class="w3-col s6">Config</span>
-      <div class="w3-col s12">
+      <div class="w3-container w3-theme-l2">
+        <h3 class="w3-col">Config</h3>
+      </div>
+      
+      <div class="w3-col s12 w3-container w3-theme-l4">
         <label class="w3-text-gray">Host</label>
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.host" placeholder="hostname">
         <label class="w3-text-gray">Port</label>
         <input class="w3-input w3-border" type="text" v-model.number="mqtt_config.port" placeholder="port">
         <label class="w3-text-gray">SSL</label>
-        <input class="w3-check" type="checkbox" v-model.number="mqtt_config.ssl">
+        <input class="w3-check" type="checkbox" v-model.number="mqtt_config.ssl"><br>
         <label class="w3-text-gray">Path</label>
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.path" placeholder="path">
         <label class="w3-text-gray">Username</label>
@@ -55,20 +59,22 @@ mc.vue.config = Vue.extend({
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.password" placeholder="password">
         <button v-on:click="configureTestServer">Set test server</button>
         <button v-on:click="connect">Connect to server</button>
-        
-        <div class="">
-          <label class="">Load Topic Config</label>
-          <select class="w3-select w3-border" v-model="selected_topic" @change="topicselected">
-            <option v-for="page in pages" v-bind:value="page.source">
-              {{ page.source }}
-            </option>
-          </select>
-        </div>
+      </div>
+      
+      <div class="w3-container w3-theme-l2">
+        <h3 class="w3-col">Edit page definition</h3>
+      </div>
+      
+      <div class="w3-col s12 w3-container w3-theme-l4">
+        <select class="w3-select w3-border" v-model="selected_topic" @change="topicselected">
+          <option v-for="page in pages" v-bind:value="page.source">
+            {{ page.source }}
+          </option>
+        </select>
         <input class="w3-input w3-border" type="text" v-model="page.topic" placeholder="Topic">
         <textarea class = "w3-input" style = "width:100%; height: 300px" v-model="page.definition" placeholder="Page definition"></textarea>
-        <button v-on:click="publish">Store config</button>
-        
-      </div>
+        <button v-on:click="publish">Store page definition</button>
+      </div>    
     </div>`,
   methods: {
     topicselected: function() {
@@ -169,7 +175,6 @@ mc.vue.config = Vue.extend({
 }`;
     },
     connect: function() {
-      console.log("Clicekd");
       mc.config.mqtt = {
         host: this.mqtt_config.host,
         port: this.mqtt_config.port,
@@ -179,6 +184,7 @@ mc.vue.config = Vue.extend({
         password: this.mqtt_config.password
       };
       mc.saveConfig();
+      mc.mqtt.connect();
     },
     publish: function() {
       if (this.page.definition != "") {
