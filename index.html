@@ -233,6 +233,12 @@
         console.log("New page");
         if (validPage) {
           mc.config.pages.push(rec_data.payload);
+          var route= {};
+          route["path"]='/' + rec_data.payload.shortname;
+          route["name"]=rec_data.payload.name;
+          route["component"]=mc.vue.page;
+          route["props"]={data: rec_data.payload};
+          app.$router.addRoutes([route])
         }
       }
       mc.saveConfig();
