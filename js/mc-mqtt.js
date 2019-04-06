@@ -127,6 +127,11 @@ mc.mqtt = (function () {
       console.log(typeof mc.config.mqtt.port);
       console.log(typeof mc.config.mqtt.path);
       
+      if (client) {
+        client.disconnect();
+      }
+      state.connected=false;
+      
       if ( (typeof mc.config.mqtt.host == "string") && (typeof mc.config.mqtt.port == "number") && (typeof mc.config.mqtt.path == "string") ) {
         client = new Paho.Client(mc.config.mqtt.host, mc.config.mqtt.port, mc.config.mqtt.path, "");
         client.onMessageArrived=onMessageArrived;

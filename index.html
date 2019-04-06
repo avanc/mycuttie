@@ -176,7 +176,7 @@
       route["path"]='/' + mc.config.pages[i].shortname;
       route["name"]=mc.config.pages[i].name;
       route["component"]=mc.vue.page;
-      route["props"]={data: mc.config.pages[i]};
+      route["props"]={data: mc.config.pages[i], mqtt_state: mc.mqtt.state};
       routes.push(route);
     }
     

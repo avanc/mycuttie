@@ -3,9 +3,10 @@ if (!mc.hasOwnProperty("vue")) {
 }
 
 mc.vue.page = Vue.extend({
-  props: ["data"],
+  props: ["data", "mqtt_state"],
   template: `
-    <div>
+    <div style="position:relative;">
+      <div v-show="!(mqtt_state.connected)" class="inactive overlay" style="background-color: white; opacity:0.85; position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index:1;"></div>
       <div class="w3-row-padding w3-stretch">
         <mc-card v-for="card in data.cards" v-bind:data="card"></> </mc-card>
       </div>
