@@ -129,6 +129,7 @@
 <body>
   <div id="app">
 
+      <!-- Welcome page -->
       <div class="w3-modal" style="display:block" v-show="first_visit">
         <div class="w3-modal-content w3-card-4">
           <header class="w3-container w3-theme-d2"> 
@@ -148,10 +149,9 @@
           </div>
         </div>
       </div>
-  
-  
-  
-  
+      
+
+    <!-- Connection indicator -->
     <span class="w3-display-topright">
       <router-link to="/config" style="text-decoration: none;">
         <span v-show="mqtt_state.connected" class="icon-state-connected w3-xxlarge"></span>
@@ -160,7 +160,7 @@
     </span>
 
     <!-- Navigation bar for large screens -->
-    <div class="w3-bar w3-theme-d2 w3-hide-small">
+    <div class="w3-bar w3-theme-d2 w3-hide-small" style="min-height:2em">
       <router-link class="w3-bar-item w3-button w3-hover-theme" v-for="link in link_list" :to="link.path" :key="link.path" active-class="w3-theme">{{ link.name }}</router-link>
     </div>
     
@@ -263,7 +263,7 @@
           route["path"]='/' + rec_data.payload.shortname;
           route["name"]=rec_data.payload.name;
           route["component"]=mc.vue.page;
-          route["props"]={data: rec_data.payload};
+          route["props"]={data: rec_data.payload, mqtt_state: mc.mqtt.state}
           app.$router.addRoutes([route])
         }
       }
