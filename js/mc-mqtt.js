@@ -122,17 +122,19 @@ mc.mqtt = (function () {
       }
     }
     
+    var validateConfig= function() {
+      return ( (typeof mc.config.mqtt.host == "string") && (typeof mc.config.mqtt.port == "number") && (typeof mc.config.mqtt.path == "string") );
+    }
+    
+    
     var connect= function() {
-      console.log(typeof mc.config.mqtt.host);
-      console.log(typeof mc.config.mqtt.port);
-      console.log(typeof mc.config.mqtt.path);
       
       if (client) {
         client.disconnect();
       }
       state.connected=false;
       
-      if ( (typeof mc.config.mqtt.host == "string") && (typeof mc.config.mqtt.port == "number") && (typeof mc.config.mqtt.path == "string") ) {
+      if ( validateConfig() ) {
         client = new Paho.Client(mc.config.mqtt.host, mc.config.mqtt.port, mc.config.mqtt.path, "");
         client.onMessageArrived=onMessageArrived;
         client.onConnectionLost=onConnectionLost;
@@ -197,6 +199,7 @@ mc.mqtt = (function () {
     document.addEventListener("visibilitychange", handleVisibilityChange, false);
     
     return {
+      validateConfig: validateConfig,
       connect: connect,
       subscribe: subscribe,
       publish: publish,

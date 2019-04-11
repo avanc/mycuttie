@@ -57,7 +57,7 @@ mc.vue.config = Vue.extend({
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.username" placeholder="username">
         <label class="w3-text-gray">Password</label>
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.password" placeholder="password">
-        <button v-on:click="configureTestServer">Set test server</button>
+        <button v-on:click="setTestServer">Set test server</button>
         <button v-on:click="connect">Connect to server</button>
       </div>
       
@@ -73,6 +73,7 @@ mc.vue.config = Vue.extend({
         </select>
         <input class="w3-input w3-border" type="text" v-model="page.topic" placeholder="Topic">
         <textarea class = "w3-input" style = "width:100%; height: 300px" v-model="page.definition" placeholder="Page definition"></textarea>
+        <button v-on:click="setTestData">Set example page definition</button>
         <button v-on:click="publish">Store page definition</button>
       </div>    
     </div>`,
@@ -85,13 +86,15 @@ mc.vue.config = Vue.extend({
         }
       }
     },
-    configureTestServer: function() {
+    setTestServer: function() {
       this.mqtt_config.host="test.mosquitto.org";
       this.mqtt_config.port=8081;
       this.mqtt_config.ssl=true;
       this.mqtt_config.path="/mqtt";
       this.mqtt_config.username=null;
       this.mqtt_config.password=null;
+    },
+    setTestData: function() {
       this.page.topic="mycuttie/main/page";
       this.page.definition=`{
   "name": "Test Dashboard",
@@ -99,31 +102,47 @@ mc.vue.config = Vue.extend({
   "rank": 1,
   "type": "mc-page",
   "cards": [
-    { "name": "Wohnzimmer",
+    {
+      "name": "Living Room",
       "type": "mc-card",
       "units": [
         {
-          "name": "Rolladen",
+          "name": "Roller Shutter",
           "type": "mc-dropdown",
-          "topic_get": "test/rolladen/get/level",
-          "topic_set": "test/rolladen/set/level",
+          "topic_get": "test/shutter/get/level",
+          "topic_set": "test/shutter/set/level",
           "options": [
-            { "text": "geöffnet", "value": "geoeffnet" },
-            { "text": "halb", "value": "halb" },
-            { "text": "geschlossen", "value": "geschlossen" }
+            {
+              "text": "Open",
+              "value": "open"
+            },
+            {
+              "text": "Half",
+              "value": "half"
+            },
+            {
+              "text": "Closed",
+              "value": "closed"
+            }
           ]
         },
         {
-          "name": "Licht",
+          "name": "Light",
           "type": "mc-switch",
-          "topic_get": "test/licht/get/state",
-          "topic_set": "test/licht/set/state"
-        },
+          "topic_get": "test/light/get/state",
+          "topic_set": "test/light/set/state"
+        }
+      ]
+    },
+    {
+      "name": "Another Room",
+      "type": "mc-card",
+      "units": [
         {
-          "name": "Slider",
+          "name": "Dimmer",
           "type": "mc-slider",
-          "topic_get": "test/licht/get/level",
-          "topic_set": "test/licht/set/level",
+          "topic_get": "test/light/get/level",
+          "topic_set": "test/light/set/level",
           "range": {
             "min": 0,
             "max": 1,
@@ -132,31 +151,41 @@ mc.vue.config = Vue.extend({
         }
       ]
     },
-    { "name": "Wohnzimmer Kopie",
+    {
+      "name": "Simulation",
       "type": "mc-card",
       "units": [
         {
-          "name": "Rolladen",
+          "name": "Roller Shutter Copy",
           "type": "mc-dropdown",
-          "topic_get": "test/rolladen/set/level",
-          "topic_set": "test/rolladen/get/level",
+          "topic_get": "test/shutter/set/level",
+          "topic_set": "test/shutter/get/level",
           "options": [
-            { "text": "geöffnet", "value": "geoeffnet" },
-            { "text": "halb", "value": "halb" },
-            { "text": "geschlossen", "value": "geschlossen" }
+            {
+              "text": "Open",
+              "value": "open"
+            },
+            {
+              "text": "Half",
+              "value": "half"
+            },
+            {
+              "text": "Closed",
+              "value": "closed"
+            }
           ]
         },
         {
-          "name": "Licht",
+          "name": "Light Copy",
           "type": "mc-switch",
-          "topic_get": "test/licht/set/state",
-          "topic_set": "test/licht/get/state"
+          "topic_get": "test/light/set/state",
+          "topic_set": "test/light/get/state"
         },
         {
-          "name": "Slider",
+          "name": "Dimmer Copy",
           "type": "mc-slider",
-          "topic_get": "test/licht/set/level",
-          "topic_set": "test/licht/get/level",
+          "topic_get": "test/light/set/level",
+          "topic_set": "test/light/get/level",
           "range": {
             "min": 0,
             "max": 1,
@@ -166,9 +195,15 @@ mc.vue.config = Vue.extend({
         {
           "name": "Text",
           "type": "mc-text",
-          "text": "Der Rolladen ist $value.",
-          "topic_get": "test/rolladen/set/level"
+          "text": "The shutter is $value.",
+          "topic_get": "test/shutter/set/level"
         },
+        {
+          "name": "Text",
+          "type": "mc-text",
+          "text": "The dimmer is at level $value.",
+          "topic_get": "test/light/set/level"
+        }
       ]
     }
   ]
