@@ -19,10 +19,12 @@ Installation
 mycuttie is _just_ a plain web page. Thus, it can be served by any webserver. Following is an example on how to use moqsuitto to serve the mycuttie webpages:
 
 Clone mycuttie:
+
     cd /my/path/to
     git clone https://github.com/avanc/mycuttie
 
 Configure mosquitto in mosquitto.conf to allow websocket connections and serve the webpage from /my/path/to/mycuttie:
+
     listener 9001
     protocol websockets
     http_dir /my/path/to/mycuttie
