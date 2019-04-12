@@ -5,13 +5,59 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="512x512"  href="images/mycuttie-512.png">
+  <link rel="icon" type="image/png" sizes="256x256"  href="images/mycuttie-256.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="images/mycuttie-192.png">
+  <link rel="icon" type="image/png" sizes="128x128"  href="images/mycuttie-128.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="images/mycuttie-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/mycuttie-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/mycuttie-16.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="images/mycuttie-128.png">
+
+
+  <link rel="stylesheet" href="3rdparty/css/w3.css">
+  <link rel="stylesheet" href="css/w3-theme-mycuttie.css">
+  
+  
+  <script src="3rdparty/js/vue.js"></script>
+    
+  <title>Clear local storage</title>
   
 </head>
 
 <body>
+  <div id="app">
+    Items in local browser storage for this domain:
+    <ul id="example-1">
+      <li v-for="key in localStorageKeys">
+        {{ key }}
+      </li>
+    </ul>
+
+    <button v-on:click="clearLocalStorage">Clear local storage</button>
+
+  </div>
+
 
   <script>
-    localStorage.clear();
+  
+    var app = new Vue({
+      el: '#app',
+      data: {
+        localStorageKeys: Object.keys(localStorage)
+      },
+      computed: {
+      },
+      methods: {
+        clearLocalStorage: function() {
+          localStorage.clear();
+          this.localStorageKeys= Object.keys(localStorage);
+        }
+      }
+    });
+    
+  
   </script>
   
 
