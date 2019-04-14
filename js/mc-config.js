@@ -11,6 +11,7 @@ mc.vue.config = Vue.extend({
         port: mc.config.mqtt.port,
         ssl: mc.config.mqtt.useSSL,
         path: mc.config.mqtt.path,
+        topic: mc.config.mqtt.topic,
         username: mc.config.mqtt.username,
         password: mc.config.mqtt.password
       },
@@ -51,8 +52,10 @@ mc.vue.config = Vue.extend({
         <input class="w3-input w3-border" type="text" v-model.number="mqtt_config.port" placeholder="port">
         <label class="w3-text-gray">SSL</label>
         <input class="w3-check" type="checkbox" v-model.number="mqtt_config.ssl"><br>
-        <label class="w3-text-gray">Path</label>
+        <label class="w3-text-gray">Websocket Path</label>
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.path" placeholder="path">
+        <label class="w3-text-gray">Page Definition Topic</label>
+        <input class="w3-input w3-border" type="text" v-model="mqtt_config.topic" placeholder="topic">
         <label class="w3-text-gray">Username</label>
         <input class="w3-input w3-border" type="text" v-model="mqtt_config.username" placeholder="username">
         <label class="w3-text-gray">Password</label>
@@ -91,6 +94,7 @@ mc.vue.config = Vue.extend({
       this.mqtt_config.port=8081;
       this.mqtt_config.ssl=true;
       this.mqtt_config.path="/mqtt";
+      this.mqtt_config.topic="mycuttie/+/page";
       this.mqtt_config.username=null;
       this.mqtt_config.password=null;
     },
@@ -195,14 +199,11 @@ mc.vue.config = Vue.extend({
         {
           "name": "Text",
           "type": "mc-text",
-          "text": "The shutter is $value.",
-          "topic_get": "test/shutter/set/level"
-        },
-        {
-          "name": "Text",
-          "type": "mc-text",
-          "text": "The dimmer is at level $value.",
-          "topic_get": "test/light/set/level"
+          "template": "The dimmer is at level $dimmerlevel and the shutter is $shutterstate.",
+          "values": {
+            "$dimmerlevel": "test/light/set/level",
+            "$shutterstate": "test/shutter/set/level"
+          }
         }
       ]
     }
@@ -215,6 +216,7 @@ mc.vue.config = Vue.extend({
         port: this.mqtt_config.port,
         useSSL: this.mqtt_config.ssl,
         path: this.mqtt_config.path,
+        topic: this.mqtt_config.topic,
         username: this.mqtt_config.username,
         password: this.mqtt_config.password
       };

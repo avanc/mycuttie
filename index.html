@@ -239,7 +239,7 @@
       }
     }
       
-    mc.mqtt.subscribe("mycuttie/+/page", function(rec_data){
+    mc.mqtt.subscribe(mc.config.mqtt.topic, function(rec_data){
       var validPage=mc.validatePage(rec_data.payload);
       var found=false;
       rec_data.payload.source=rec_data.topic;
