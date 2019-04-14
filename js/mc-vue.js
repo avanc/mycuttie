@@ -2,10 +2,59 @@ if (!mc.hasOwnProperty("vue")) {
   mc.vue={};
 }
 
+mc.pd_version=1.0;
+
 mc.vue.page = Vue.extend({
   props: ["data", "mqtt_state"],
+  data: function () {
+    return {
+      error: {
+        title: "",
+        text: ""
+      }
+    }
+  },
+  watch: {
+    "data": function(val){
+    }
+  },
+  created: function() {
+    this.checkVersion();
+  },
+  methods: {
+    checkVersion: function() {
+      var version=this.data.version;
+      if (typeof version =="undefined") {
+        version=0.0;
+      }
+      if (version<mc.pd_version) {
+        this.error.title="Old page definition";
+        this.error.text="This page definition uses an old schema (" + version + "). mycuttie is at schema version " + mc.pd_version + ".";
+      }
+      else if (version>mc.pd_version) {
+        this.error.title="Old mycuttie";
+        this.error.text="This page definition uses a newer schema (" + version + "). mycuttie is at schema version " + mc.pd_version + ". Please update mycuttie.";
+      }
+        
+    }
+  },
   template: `
     <div style="position:relative;">
+
+      <div id="id01" class="w3-modal" style="display:block" v-show="error.title != ''">
+        <div class="w3-modal-content w3-card-4">
+          <header class="w3-container w3-red"> 
+            <span v-on:click="error.title=''" 
+            class="w3-button w3-display-topright">&times;</span>
+            <h2>{{ error.title }}</h2>
+          </header>
+          <div class="w3-container">
+            <p>{{ error.text }}</p>
+          </div>
+        </div>
+      </div>
+    
+    
       <div v-show="!(mqtt_state.connected)" class="inactive overlay" style="background-color: white; opacity:0.85; position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index:1;"></div>
       <div class="w3-row-padding w3-stretch">
         <mc-card v-for="card in data.cards" v-bind:data="card"></> </mc-card>

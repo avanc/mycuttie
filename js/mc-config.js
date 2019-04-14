@@ -104,6 +104,7 @@ mc.vue.config = Vue.extend({
   "name": "Test Dashboard",
   "shortname": "main",
   "rank": 1,
+  "version": 1.0,
   "type": "mc-page",
   "cards": [
     {
