@@ -174,25 +174,28 @@ Vue.component('mc-text', {
   props: ["data"],
   data: function () {
     return {
-      value: undefined,
-      subscription: undefined
+      values: {},
+      subscriptions: {}
     }
   },
   computed: {
     formattedText: function () {
-      var value=this.value;
-      var text = this.data.text;
-      var formattedText;
-      
-      if (typeof value == "undefined") {
-        value="";
+      var formattedText=this.data.template;
+      var templateAvailable=true;
+      if (typeof formattedText == "undefined") {
+        formattedText="";
+        templateAvailable=false;
       }
       
-      if (typeof text == "undefined") {
-        formattedText=value;
-      }
-      else {
-        formattedText = text.replace("$value", value);
+      for (var key in this.values) {
+        if (this.values.hasOwnProperty(key)) {
+          if (templateAvailable) {
+            formattedText = formattedText.replace(key, this.values[key]);
+          }
+          else {
+            formattedText = formattedText + key + ": " + this.values[key] + "; ";
+          }
+        }
       }
       
       return formattedText;
@@ -210,20 +213,25 @@ Vue.component('mc-text', {
   },
   methods:{
     subscribe: function() {
-      console.log(this.subscription)
-      if (this.subscription){
-        console.log("Removing subscription");
-        this.subscription.remove();
+
+      for (var key in this.data.values) {
+        if (this.data.values.hasOwnProperty(key)) {
+//           if (this.subscriptions[key]){
+//             console.log("Removing subscription");
+//             this.subscription[key].remove();
+//           }
+          console.log("Create callback for " + key);
+          this.$set(this.values, key, "");
+          var callback = function(context, key){
+            return function(data) {
+              console.log("Data received for " + key);
+              context.values[key]=data.payload;
+            }
+          }(this, key);
+          this.subscriptions[key]=mc.mqtt.subscribe(this.data.values[key], callback); 
+        }
       }
-      
-      console.log("Create callback for " + this.data.name);
-      var context=this;
-      var callback=function(data) {
-        console.log("Data received for " + context.data.name);
-        context.value=data.payload;
-      };
-      this.subscription=mc.mqtt.subscribe(this.data.topic_get, callback); 
-    } 
+    }
   },
   template: `
     <div class="w3-cell-row w3-border-bottom">
