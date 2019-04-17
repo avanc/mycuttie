@@ -251,9 +251,9 @@ Vue.component('mc-text', {
     }
   },
   watch: {
-    "data.topic_get": function(val){
-      console.log("get-topic changed");
-      this.value=undefined;
+    "data.values": function(val){
+      console.log("values changed");
+      this.values={};
       this.subscribe();
     }
   },
@@ -265,10 +265,11 @@ Vue.component('mc-text', {
 
       for (var key in this.data.values) {
         if (this.data.values.hasOwnProperty(key)) {
-//           if (this.subscriptions[key]){
-//             console.log("Removing subscription");
-//             this.subscription[key].remove();
-//           }
+          if (this.subscriptions[key]){
+            console.log("Removing subscriptions "+ key);
+            this.subscriptions[key].remove();
+            delete this.subscriptions[key];
+          }
           console.log("Create callback for " + key);
           this.$set(this.values, key, "");
           var callback = function(context, key){
