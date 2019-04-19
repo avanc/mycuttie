@@ -90,8 +90,8 @@ mc.vue.config = Vue.extend({
       }
     },
     setTestServer: function() {
-      this.mqtt_config.host="test.mosquitto.org";
-      this.mqtt_config.port=8081;
+      this.mqtt_config.host="iot.eclipse.org";
+      this.mqtt_config.port=443;
       this.mqtt_config.ssl=true;
       this.mqtt_config.path="/mqtt";
       this.mqtt_config.topic="mycuttie/+/page";
