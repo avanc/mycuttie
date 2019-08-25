@@ -290,6 +290,52 @@ Vue.component('mc-text', {
 })
 
 
+Vue.component('mc-image', {
+  props: ["data"],
+  data: function () {
+    return {
+      value: undefined,
+      subscriptions: {}
+    }
+  },
+  computed: {
+  },
+  watch: {
+    "data.value": function(val){
+      console.log("topic changed");
+      this.value=undefined;
+      this.subscribe();
+    }
+  },
+  created: function() {
+    this.subscribe();
+  },
+  methods:{
+    subscribe: function() {
+      console.log(this.subscription)
+      if (this.subscription){
+        console.log("Removing subscription");
+        this.subscription.remove();
+      }
+      
+      console.log("Create callback for " + this.data.name);
+      var context=this;
+      var callback=function(data) {
+        console.log("Data received for " + context.data.name);
+        context.value=data.payload;
+      };
+      this.subscription=mc.mqtt.subscribe(this.data.image, callback); 
+    } 
+  },
+  template: `
+    <div class="w3-row w3-border-bottom">
+      <label class="">{{ data.name }}</label>
+      <img class="" style="max-width:100%" v-bind:src="value">
+    </div>`
+})
+
+
+
 mc.validatePage = function(page) {
   if (typeof page !== 'object' || page === null) return false;
   
